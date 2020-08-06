@@ -15,6 +15,9 @@ Klabot is a really useless Discord Bot created using DiscordJS and quickDB
 	"token": "YOUR_TOKEN_HERE"
 }
 ```
+
+For the assets you need to place them on a folder called assets, name the image as liK.png, or change the name on the source.
+Also you need a bell.mp3 file on the root for the bell sound, or again change the name on the source.
 # Usage 
 You can see a list of the commands using the help command `-k help`
 
