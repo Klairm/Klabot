@@ -1,4 +1,5 @@
 const fs = require('fs');
+const db = require('quick.db');
 const Discord = require('discord.js');
 const { prefix, token } = require('./config.json');
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
@@ -63,56 +64,13 @@ client.on('messageReactionAdd', async (reaction,user) =>{
 
 client.on('voiceStateUpdate',async (oldMember,newMember) => {
 	if(newMember.member.user.bot) return;
-
-	// FIXME: Optimize this
-	fs.readFile("bells.txt",async function(err,text){
-        if(err){
-                return console.log("An error has ocurred reading bells.txt file");
-        }
-
-        var textByLine = text.toString().split(",");
-        var i;
-        // loop through all the strings saved in bells.txt ( which should be channel IDs ) 
-        for(i = 0; i<textByLine.length;i++)
-	{
-        
-	        if(isNaN(textByLine[i])){ // check if string is a number
-	        	console.log(`Not a number:  ${textByLine[i]}`);
-                }
-                if(!client.channels.cache.has(textByLine[i])){ // check if the string it's a real channel ID
-			if(textByLine[i]=="" || textByLine[i]=="," || textByLine[i] ==",," || textByLine[i]==null);
-			else console.log(`Invalid channel id:  ${textByLine[i]}`);
-		
-		}
-		
-		// Check if the member channel is on a  voice channel, and if the channel ID is equivalent to the ID saved on the bells.txt
-		// If so, join that channel
-		if(newMember.guild.channels.cache.filter(c => c.id == textByLine[i] && c.type == "voice").map(c=>c.id)[0] ){  
-			var bell = await   client.channels.cache.get(textByLine[i]).join()
-		}	
-        }
+	if(!db.has(`${newMember.guild.id}.bell`)) return;
+	if(!db.has(`${newMember.guild.id}.door`)) return;
 	
-		// Same as above but with doors.txt, ( where the bot will be checking if there's a new member that joined that channel
-		
-	fs.readFile("doors.txt",async function(errr,texxt){
-	if(errr){
-		return console.log("An error has ocurred reading doors.txt file");
-	}
-	var textByLineDoors = texxt.toString().split(",");
-	var j;
-
-	for(j=0;j<textByLineDoors.length;j++){	
-		if(newMember.guild.channels.cache.filter(c => c.id == textByLineDoors[j] && c.type == "voice").map(c=>c.id)[0]){
-			var  door = textByLineDoors[j];
-			}
-		
-	}
-	
+	var bell = await   client.channels.cache.get(db.get(`${newMember.guild.id}.bell`)).join();
+	var door = db.get(`${newMember.guild.id}.door`);
 	let newUserChannel = newMember.channel;
-	// Check if the channel ID that the member joined is the door channel, if so it will play the .mp3  file on bell VC
-	
-	if(newUserChannel == null || newUserChannel == undefined);
-	else if (newUserChannel == door )
+	 if (newUserChannel == door )
 	{
 		var date = new Date();
 		console.log(`${newMember.member.displayName} entered to the door that has channelID: ${newUserChannel} on  the guild: ${newMember.member.guild.name}, at time: ${date} `);
@@ -121,8 +79,6 @@ client.on('voiceStateUpdate',async (oldMember,newMember) => {
 		bell.play("bell.mp3");
 		
 	}
-	});
-   	});
 
 });
 
