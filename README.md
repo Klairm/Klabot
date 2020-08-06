@@ -34,14 +34,29 @@ For set this channels you can use the bell and door commands, example:
  ```
  If you want to update the channel ID you can just run the door/bell command again.
  
+
+ You don't need to provide the channel ID in this case, just provide what type of channel you want to remove (bell or door). 
+
+## Favorite messages
+
+Klabot provides a way to send your favorite messages to a specified channel, to do this you need to specify the channel where all the favorite messages will be sent.
+You can do that with the command `-k favmessage channelID` 
+Example:
+```
+ -k favmessage 519969191067910144
+```
+The favorite message are those that have an reaction with the pill emoji :pill:
+
+## Removing channels ID
  If you want to remove the channels ID, you can use the deleteid command, example:
- ```
+```
  -k deleteid bell
  -k deleteid door
- ```
- You don't need to provide the channel ID in this case, just provide what type of channel you want to remove (bell or door). 
- 
- ## TODO:
+ -k deleteid favmessage
+```
+ This will delete the channel ID of the key specified from the quick.db database.
+
+## TODO:
  - Add a events creation system, so you can schedule reunions, game times, anything with your friends.
  - Add a lock and unlock for voice channels making the bell system more useful.
  - Add a WebHook for RSS.
