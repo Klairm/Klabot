@@ -44,6 +44,8 @@ client.on('messageReactionAdd', async (reaction,user) =>{
 	// Check if the emoji reaction that has been added is the :pill: emoji, if so create an embed with user information and send it to a channel
 	// FIXME: Check that the reaction has been added in the same guild as the channelID where it will be sent.
 	if(reaction.emoji.name == "💊"){
+	if(!db.has(`${reaction.message.guild.id}.favmessage`)) return;
+	   // Thanks LilaQ 
 	   const favMessage ={
 	   author: {
  	   name: reaction.message.author.username,
@@ -56,8 +58,8 @@ client.on('messageReactionAdd', async (reaction,user) =>{
        	   url: reaction.message.url, 
            description: reaction.message.content, 
 	};
-			
-	reaction.client.channels.cache.get("722501428563804251").send({embed: favMessage });
+	
+	reaction.message.guild.channels.cache.get(db.get(`${reaction.message.guild.id}.favmessage`)).send({embed: favMessage });
 }
 });
 

@@ -1,4 +1,3 @@
-const fs = require('fs');
 const db = require('quick.db');
 module.exports = {
 	name: 'bell',
@@ -8,7 +7,7 @@ module.exports = {
 	if(!args.length){
 		return message.reply("you didn't provide any arguments!");
 	}
-	if(!message.member.hasPermission('MANAGE_CHANNELS')&&message.member.id!="386937601761869825"){
+	if(!message.member.hasPermission('MANAGE_CHANNELS')){
 		return message.reply("You can't do this because you don't have permissions for manage channels.");
 	}
 
