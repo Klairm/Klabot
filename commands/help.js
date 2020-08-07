@@ -13,7 +13,7 @@ module.exports= {
 	data.push(commands.map(command => command.name).join(', '));	
 	const noArgsEmbed = {
 		title: 'Klabot help guide',
-		description: `\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`,
+		description: `\nYou can send \`${prefix}help <command name>\` to get info on a specific command!`,
 		author: {
 			name: 'Klabot',
 			icon_url: 'attachment://liK.png',

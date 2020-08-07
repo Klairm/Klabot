@@ -12,11 +12,13 @@ for (const file of commandFiles) {
 }
 
 client.once('ready',() => {
-	console.log('Ready!');	
+	console.log('Ready!');
+	client.user.setPresence({activity:{name:"https://github.com/Klairm/Klabot",type:"PLAYING",status:"online"}}).catch(console.error);
 
 });
-/*
+
 client.on('guildMemberUpdate', async (oldUser,newUser) =>{	
+	if(!db.has(`${newUser.guild.id}.nickname-protection`,'on')) return;
 	var regex = /^[A-Za-z0-9 ]/
 	if(!regex.test(newUser.nickname)){
 		if(oldUser.nickname == null){
@@ -28,7 +30,7 @@ client.on('guildMemberUpdate', async (oldUser,newUser) =>{
 		
 	}
 });
-*/
+
 client.on('messageReactionAdd', async (reaction,user) =>{
 	
 	if (reaction.partial) {
@@ -42,7 +44,6 @@ client.on('messageReactionAdd', async (reaction,user) =>{
 	}
 
 	// Check if the emoji reaction that has been added is the :pill: emoji, if so create an embed with user information and send it to a channel
-	// FIXME: Check that the reaction has been added in the same guild as the channelID where it will be sent.
 	if(reaction.emoji.name == "💊"){
 	if(!db.has(`${reaction.message.guild.id}.favmessage`)) return;
 	   // Thanks LilaQ 
