@@ -56,6 +56,10 @@ The favorite message are those that have an reaction with the pill emoji :pill:
 ```
  This will delete the channel ID of the key specified from the quick.db database.
 
+## Nickname "protection"
+With the command `-k nickname-protection on` you can enable the "nickname protection" which means that users can't use special characters on their nickname, if they try to do that, their nickname will be reset.
+For disable this: `-k nickname-protection off`
+
 ## TODO:
  - Add a events creation system, so you can schedule reunions, game times, anything with your friends.
  - Add a lock and unlock for voice channels making the bell system more useful.
