@@ -11,9 +11,9 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
-client.once('ready', () => {
+client.on('ready', async() => {
     console.log('Ready!');
-    client.user.setPresence({ activity: { name: "https://github.com/Klairm/Klabot", type: "PLAYING", status: "online" } }).catch(console.error);
+    client.user.setPresence({ activity: { name: "-k help", type: "PLAYING", status: "online" } }).catch(console.error);
 
 });
 
@@ -29,6 +29,26 @@ client.on('guildMemberUpdate', async (oldUser, newUser) => {
 
     }
 });
+
+
+client.on('messageDelete', async(message) => {
+    if (message.partial) return;
+    if (!db.has(`${message.guild.id}.logs`)) return;
+    const deletedMessage = {
+        author: {
+                    name: 'Klabot',
+                    icon_url: 'attachment://liK.png',
+                },
+        fields:[{
+            name: `Message author ${message.author.username}`,
+
+        }],        
+                description: message.content,
+    };
+
+    message.guild.channels.cache.get(db.get(`${message.guild.id}.logs`)).send({embed : deletedMessage});
+});
+
 
 client.on('messageReactionAdd', async (reaction, user) => {
 
@@ -70,17 +90,25 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
     if (!db.has(`${newMember.guild.id}.bell`)) return;
     if (!db.has(`${newMember.guild.id}.door`)) return;
 
-    var bell = await client.channels.cache.get(db.get(`${newMember.guild.id}.bell`)).join();
-    var door = db.get(`${newMember.guild.id}.door`);
-    let newUserChannel = newMember.channel;
-    if (newUserChannel == door) {
-        var date = new Date();
-        console.log(`${newMember.member.displayName} entered to the door that has channelID: ${newUserChannel} on  the guild: ${newMember.member.guild.name}, at time: ${date} `);
-        console.log(`Bell ID -> ${bell.channel.id}`);
-        console.log(`Door ID -> ${door}`);
-        bell.play("bell.mp3");
+    try {
+        var bell = await client.channels.cache.get(db.get(`${newMember.guild.id}.bell`)).join();
+        //client.channels.cache.get(db.get(`${newMember.guild.id}.bell`)).overwritePermissions([{id:newMember.guild.roles.everyone,deny: 'VIEW_CHANNEL',}]);
+        var door = db.get(`${newMember.guild.id}.door`);
+        let newUserChannel = newMember.channel;
+        if (newUserChannel == null && oldMember.channel == door) console.log(`${newMember.member.displayName} left from the door`);
+        if (newUserChannel == door) {
+            var date = new Date();
+            console.log(`${newMember.member.displayName} entered to the door that has channelID: ${newUserChannel} on  the guild: ${newMember.member.guild.name}, at time: ${date} `);
+            console.log(`Bell ID -> ${bell.channel.id}`);
+            console.log(`Door ID -> ${door}`);
+            bell.play("bell.mp3");
 
+        }
+    } catch (error) {
+        return console.log("Something went wrong,", error);
     }
+
+
 
 });
 
@@ -98,5 +126,9 @@ client.on('message', async message => {
         message.reply('there was an error trying to execute that command!');
     }
 });
+
+client.on('error', async (error) => {
+    console.log("An error has ocurred", error);
+})
 
 client.login(token);
