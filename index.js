@@ -11,7 +11,7 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
-client.on('ready', async() => {
+client.on('ready', async () => {
     console.log('Ready!');
     client.user.setPresence({ activity: { name: "-k help", type: "PLAYING", status: "online" } }).catch(console.error);
 
@@ -31,22 +31,22 @@ client.on('guildMemberUpdate', async (oldUser, newUser) => {
 });
 
 
-client.on('messageDelete', async(message) => {
+client.on('messageDelete', async (message) => {
     if (message.partial) return;
     if (!db.has(`${message.guild.id}.logs`)) return;
     const deletedMessage = {
         author: {
-                    name: 'Klabot',
-                    icon_url: 'attachment://liK.png',
-                },
-        fields:[{
+            name: 'Klabot',
+            icon_url: 'attachment://liK.png',
+        },
+        fields: [{
             name: `Message author ${message.author.username}`,
 
-        }],        
-                description: message.content,
+        }],
+        description: message.content,
     };
 
-    message.guild.channels.cache.get(db.get(`${message.guild.id}.logs`)).send({embed : deletedMessage});
+    message.guild.channels.cache.get(db.get(`${message.guild.id}.logs`)).send({ embed: deletedMessage });
 });
 
 
