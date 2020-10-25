@@ -49,6 +49,17 @@ client.on('messageDelete', async (message) => {
     message.guild.channels.cache.get(db.get(`${message.guild.id}.logs`)).send({ embed: deletedMessage });
 });
 
+client.on('guildMemberAdd', async (member) => {
+
+    updCounter(member);
+
+});
+
+client.on('guildMemberRemove', async (member) => {
+
+    updCounter(member);
+
+});
 
 client.on('messageReactionAdd', async (reaction, user) => {
 
@@ -113,6 +124,13 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
 });
 
 client.on('message', async message => {
+
+    if (message.channel.id == 296133488111779841 && message.author.bot && message.content.includes("Just incase we ever for some reason  get this Server and the Backup Deleted you can always check out our website for the Discord Status")) {
+        message.delete({ timeout: 5000 })
+            .then(msg => console.log(`Deleted message from ${msg.author.username} after 5 seconds`))
+            .catch(console.error);
+    }
+
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
@@ -132,3 +150,11 @@ client.on('error', async (error) => {
 })
 
 client.login(token);
+
+
+function updCounter(member) {
+    if (!db.has(`${member.guild.id}.membercounter`)) return;
+    member.guild.channels.cache.get(db.get(`${member.guild.id}.membercounter`)).edit({ name: `total members: ${member.guild.memberCount}` });
+
+
+}

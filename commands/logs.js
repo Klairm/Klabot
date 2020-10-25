@@ -10,5 +10,6 @@ module.exports = {
         db.set(`${message.guild.id}.logs`, `${message.channel.id}`);
         if (db.has(`${message.guild.id}.logs`)) return message.reply("Channel saved succesfully for server logs.");
         else return message.reply("Cannot save the channel.");
+
     },
 };
