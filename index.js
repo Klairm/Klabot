@@ -1,11 +1,20 @@
 const fs = require('fs');
 const db = require('quick.db');
 const Discord = require('discord.js');
-const { Player } = require('discord-player');
-const { prefix, token } = require('./config.json');
-const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+const {
+    Player
+} = require('discord-player');
+const {
+    prefix,
+    token
+} = require('./config.json');
+const client = new Discord.Client({
+    partials: ['MESSAGE', 'CHANNEL', 'REACTION']
+});
 client.commands = new Discord.Collection();
-client.player = new Player(client, {enableLive:true} );
+client.player = new Player(client, {
+    enableLive: true
+});
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
@@ -17,20 +26,26 @@ for (const file of commandFiles) {
 
 client.player.on("trackStart", (message, track) => message.channel.send(`✅ | Now playing ${track.title}...`));
 
-client.player.on("trackAdd", (message,queue,track) => message.channel.send(`✅ | Added ${track.title} to the queue...`));
+client.player.on("trackAdd", (message, queue, track) => message.channel.send(`✅ | Added ${track.title} to the queue...`));
 
-client.player.on("playlistAdd", (message,queue,playlist) => message.channel.send(`✅ | Added ${playlist.title} to the queue...`));
+client.player.on("playlistAdd", (message, queue, playlist) => message.channel.send(`✅ | Added ${playlist.title} to the queue...`));
 
-client.player.on("error", (error,message) => console.log("Player Error -> ",error));
+client.player.on("error", (error, message) => console.log("Player Error -> ", error));
 
 
 
-client.player.on("noResults",(message,query) => message.channel.send("❌ | No results found."));
+client.player.on("noResults", (message, query) => message.channel.send("❌ | No results found."));
 client.on('ready', async () => {
-	
-      var date = new Date();
+
+    var date = new Date();
     console.log(`Ready at ${date}`);
-    client.user.setPresence({ activity: { name: "-k help", type: "PLAYING", status: "online" } }).catch(console.error);
+    client.user.setPresence({
+        activity: {
+            name: "-k help",
+            type: "PLAYING",
+            status: "online"
+        }
+    }).catch(console.error);
 
 });
 client.on('guildMemberUpdate', async (oldUser, newUser) => {
@@ -72,7 +87,7 @@ client.on('guildMemberAdd', async (member) => {
 });
 
 client.on('guildMemberRemove', async (member) => {
-    
+
     updCounter(member);
 
 });
@@ -107,7 +122,9 @@ client.on('messageReactionAdd', async (reaction, user) => {
             description: reaction.message.content,
         };
 
-        reaction.message.guild.channels.cache.get(db.get(`${reaction.message.guild.id}.favmessage`)).send({ embed: favMessage });
+        reaction.message.guild.channels.cache.get(db.get(`${reaction.message.guild.id}.favmessage`)).send({
+            embed: favMessage
+        });
     }
 });
 
@@ -143,14 +160,16 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
 client.on('message', async message => {
 
     if (message.channel.id == 296133488111779841 && message.author.bot && message.content.includes("Just incase we ever for some reason  get this Server and the Backup Deleted you can always check out our website for the Discord Status")) {
-        message.delete({ timeout: 5000 })
+        message.delete({
+                timeout: 5000
+            })
             .then(msg => console.log(`Deleted message from ${msg.author.username} after 5 seconds`))
             .catch(console.error);
     }
 
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     const args = message.content.slice(prefix.length).split(/ +/g);
-    const commandName = args.shift().toLowerCase(); 
+    const commandName = args.shift().toLowerCase();
     if (!client.commands.has(commandName)) return;
 
     try {
@@ -170,7 +189,9 @@ client.login(token);
 
 function updCounter(member) {
     if (!db.has(`${member.guild.id}.membercounter`)) return;
-    member.guild.channels.cache.get(db.get(`${member.guild.id}.membercounter`)).edit({ name: `total members: ${member.guild.memberCount}` });
+    member.guild.channels.cache.get(db.get(`${member.guild.id}.membercounter`)).edit({
+        name: `total members: ${member.guild.memberCount}`
+    });
 
 
 }
