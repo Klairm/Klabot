@@ -3,7 +3,8 @@ module.exports = {
     description: 'Prune up to 99 messages.',
     usage: '-k prune n',
     execute(message, args) {
-        if (!args.length) {
+	if(!message.guild.me.hasPermission(MANAGE_MESSAGES)) message.channel.send("I don't have enough permissions.");
+	  if (!args.length) {
             return message.reply("you didn't provide any arguments!");
 
         }

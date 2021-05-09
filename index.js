@@ -1,22 +1,38 @@
 const fs = require('fs');
 const db = require('quick.db');
 const Discord = require('discord.js');
+const { Player } = require('discord-player');
 const { prefix, token } = require('./config.json');
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 client.commands = new Discord.Collection();
+client.player = new Player(client, {enableLive:true} );
+
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
 }
+/*** Player events for music ***/
 
+client.player.on("trackStart", (message, track) => message.channel.send(`✅ | Now playing ${track.title}...`));
+
+client.player.on("trackAdd", (message,queue,track) => message.channel.send(`✅ | Added ${track.title} to the queue...`));
+
+client.player.on("playlistAdd", (message,queue,playlist) => message.channel.send(`✅ | Added ${playlist.title} to the queue...`));
+
+client.player.on("error", (error,message) => console.log("Player Error -> ",error));
+
+
+
+client.player.on("noResults",(message,query) => message.channel.send("❌ | No results found."));
 client.on('ready', async () => {
-    console.log('Ready!');
+	
+      var date = new Date();
+    console.log(`Ready at ${date}`);
     client.user.setPresence({ activity: { name: "-k help", type: "PLAYING", status: "online" } }).catch(console.error);
 
 });
-
 client.on('guildMemberUpdate', async (oldUser, newUser) => {
     if (!db.has(`${newUser.guild.id}.nickname-protection`, 'on')) return;
     var regex = /^[A-Za-z0-9 ]/
@@ -30,7 +46,7 @@ client.on('guildMemberUpdate', async (oldUser, newUser) => {
     }
 });
 
-
+/*
 client.on('messageDelete', async (message) => {
     if (message.partial) return;
     if (!db.has(`${message.guild.id}.logs`)) return;
@@ -48,7 +64,7 @@ client.on('messageDelete', async (message) => {
 
     message.guild.channels.cache.get(db.get(`${message.guild.id}.logs`)).send({ embed: deletedMessage });
 });
-
+*/
 client.on('guildMemberAdd', async (member) => {
 
     updCounter(member);
@@ -56,7 +72,7 @@ client.on('guildMemberAdd', async (member) => {
 });
 
 client.on('guildMemberRemove', async (member) => {
-
+    
     updCounter(member);
 
 });
@@ -108,10 +124,11 @@ client.on('voiceStateUpdate', async (oldMember, newMember) => {
         let newUserChannel = newMember.channel;
         if (newUserChannel == null && oldMember.channel == door) console.log(`${newMember.member.displayName} left from the door`);
         if (newUserChannel == door) {
+
             var date = new Date();
             console.log(`${newMember.member.displayName} entered to the door that has channelID: ${newUserChannel} on  the guild: ${newMember.member.guild.name}, at time: ${date} `);
-            console.log(`Bell ID -> ${bell.channel.id}`);
-            console.log(`Door ID -> ${door}`);
+            console.log(`[INFO] Bell ID -> ${bell.channel.id}`);
+            console.log(`[INFO] Door ID -> ${door}`);
             bell.play("bell.mp3");
 
         }
@@ -132,9 +149,8 @@ client.on('message', async message => {
     }
 
     if (!message.content.startsWith(prefix) || message.author.bot) return;
-    const args = message.content.slice(prefix.length).split(/ +/);
-    const commandName = args.shift().toLowerCase();
-
+    const args = message.content.slice(prefix.length).split(/ +/g);
+    const commandName = args.shift().toLowerCase(); 
     if (!client.commands.has(commandName)) return;
 
     try {
