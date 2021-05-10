@@ -7,6 +7,7 @@ Klabot is a really useless Discord Bot created using DiscordJS and quickDB
   - NodeJS v12
   - DiscordJS `npm install discord.js`
   - QuickDB   `npm install quick.db`
+  - Discord-Player `npm install --save discord-player` + `npm install --save @discordjs/opus`
  
  You also need a file named `config.json` with your token from the [Discord Developer Portal](https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot), also you can edit the prefix there, the file should look like this:
  ```json
@@ -59,6 +60,9 @@ The favorite message are those that have an reaction with the pill emoji :pill:
 ## Nickname "protection"
 With the command `-k nickname-protection on` you can enable the "nickname protection" which means that users can't use special characters on their nickname, if they try to do that, their nickname will be reset.
 For disable this: `-k nickname-protection off`
+
+## Music Player
+You can reproduce music and YouTube videos with the player commands like: `-k play`, `-k skip`, `-k resume`, `-k stop`, `-k pause`.
 
 ## TODO:
  - Add a events creation system, so you can schedule reunions, game times, anything with your friends.

@@ -3,9 +3,8 @@ module.exports = {
     description: 'Tag a member and kick them.',
     usage: '-k kick @member',
     execute(message, args) {
-        if (!args.length) {
-            return message.reply("you didn\'t provide any arguments.");
-        }
+        if (!args.length) return message.reply("you didn\'t provide any arguments.");
+        if (!message.guild.me.hasPermission('KICK_MEMBERS')) return message.channel.send("I don't have enough permissions.");
         if (!message.mentions.users.size) {
             return message.reply('you need to tag a user in order to kick them!');
         }
