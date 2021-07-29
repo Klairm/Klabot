@@ -8,11 +8,7 @@
   "scripts":{
     "start":"node index.js"
   },
-  "name": "klabot",
-  "engines": 
-  {
-    "node":"16.x"
-  }
-  
+  "name": "klabot"
+
 
 }
