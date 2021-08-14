@@ -4,8 +4,8 @@ Klabot is a really useless Discord Bot created using DiscordJS and quickDB
 
 # Requirements
 
-- NodeJS v12
-- DiscordJS `npm install discord.js @discordjs/rest discord-api-types @discordjs/voice sodium`
+- NodeJS v16.6 or higher
+- DiscordJSv13 `npm install discord.js @discordjs/rest discord-api-types @discordjs/voice sodium`
 - QuickDB `npm install quick.db`
 - Discord-Player `npm install --save discord-player ` + `npm install --save @discordjs/opus`
 
