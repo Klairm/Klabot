@@ -1,28 +1,39 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
 module.exports = {
-    name: 'kick',
-    description: 'Tag a member and kick them.',
-    usage: '-k kick @member',
-    execute(message, args) {
-        if (!args.length) return message.reply("you didn\'t provide any arguments.");
-        if (!message.guild.me.hasPermission('KICK_MEMBERS')) return message.channel.send("I don't have enough permissions.");
-        if (!message.mentions.users.size) {
-            return message.reply('you need to tag a user in order to kick them!');
-        }
-
-        const taggedUser = message.mentions.members.first();
-        if (!message.member.hasPermission('KICK_MEMBERS')) {
-            return message.reply("you don't have permissions to do that, you idiot.");
-        }
-        if (!taggedUser.kickable) {
-            return message.reply("I can't kick that member");
-        } else {
-
-            if (!taggedUser.kick()) {
-                message.reply("something went wrong.");
-            } else {
-
-                message.reply(`kicked ${taggedUser} succesfully.`);
-            }
-        }
-    },
+  data: new SlashCommandBuilder()
+    .setName('kick')
+    .setDescription('Kick a member.')
+    .addUserOption((option) =>
+      option
+        .setName('member')
+        .setDescription('Member to kick')
+        .setRequired(true)
+    ),
+  async execute(interaction) {
+    if (!interaction.options.getMember('member'))
+      return interaction.reply({
+        content: "That member doesn't exists!",
+        ephemeral: true,
+      });
+    const assKicked = interaction.options.getMember('member').user.username;
+    if (!interaction.member.permissions.has('KICK_MEMBERS')) {
+      return interaction.reply("you don't have permissions to do that, idiot.");
+    }
+    if (!interaction.options.getMember('member').kickable) {
+      return interaction.reply({
+        content: "I can't kick that member",
+        ephemeral: true,
+      });
+    } else {
+      if (!interaction.options.getMember('member').kick()) {
+        interaction.reply({
+          content: 'something went wrong.',
+          ephemeral: true,
+        });
+      } else {
+        interaction.reply(`Kicked ${assKicked}  succesfully.`);
+      }
+    }
+  },
 };

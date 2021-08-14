@@ -1,29 +1,40 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
 module.exports = {
-    name: 'ban',
-    description: 'Tag a member and ban them.',
-    usage: '-k ban @member',
-    execute(message, args) {
-        if (!args.length) {
-            return message.reply("you didn\'t provide any arguments.");
-        }
-        if (!message.mentions.users.size) {
-            return message.reply('you need to tag a user in order to ban them!');
-        }
+  data: new SlashCommandBuilder()
+    .setName('ban')
+    .setDescription('Ban a member.')
+    .addUserOption((option) =>
+      option
+        .setName('member')
+        .setDescription('Mmeber to kick')
+        .setRequired(true)
+    ),
+  async execute(interaction) {
+    if (!interaction.options.getMember('member'))
+      return interaction.reply({
+        content: "That member doesn't exists!",
+        ephemeral: true,
+      });
+    const hammered = interaction.options.getMember('member').user.username;
+    if (!interaction.member.permissions.has('BAN_MEMBERS')) {
+      return interaction.reply("you don't have permissions to do that, idiot.");
+    }
 
-        const taggedUser = message.mentions.members.first();
-        if (!message.member.hasPermission('BAN_MEMBERS')) {
-            return message.reply("you don't have permissions to do that, you idiot.");
-        }
-        if (!taggedUser.kickable) {
-            return message.reply("I can't ban that member");
-        } else {
-
-            if (!taggedUser.ban()) {
-                message.reply("something went wrong.");
-            } else {
-
-                message.reply(`banned  ${taggedUser} succesfully.`);
-            }
-        }
-    },
+    if (!interaction.options.getMember('member').bannable) {
+      return interaction.reply({
+        content: "I can't ban that member",
+        ephemeral: true,
+      });
+    } else {
+      if (!interaction.options.getMember('member').ban()) {
+        interaction.reply({
+          content: 'something went wrong.',
+          ephemeral: true,
+        });
+      } else {
+        interaction.reply(`Banned ${hammered}  succesfully.`);
+      }
+    }
+  },
 };

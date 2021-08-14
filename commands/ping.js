@@ -1,7 +1,10 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
 module.exports = {
-    name: 'ping',
-    description: 'Check if the bot is alive and can reply',
-    execute(message) {
-        message.channel.send('Pong.');
-    },
+  data: new SlashCommandBuilder()
+    .setName('ping')
+    .setDescription('Check if the bot is alive and can reply'),
+  async execute(interaction) {
+    await interaction.reply({ content: 'Pong.', ephemeral: true });
+  },
 };
