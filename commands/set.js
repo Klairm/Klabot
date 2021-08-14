@@ -39,7 +39,7 @@ module.exports = {
 		switch (interaction.options.getSubcommand()) {
 			case 'favmessage':
 				if (setChannel(interaction, 'favmessage')) {
-					return interaction.reply('✅ |Channel saved for favorite messages succesfully.');
+					return interaction.reply('✅ | Channel saved for favorite messages succesfully.');
 				} else
 					return interaction.reply({
 						content: '❌ | Failed to save channel.',
@@ -48,7 +48,7 @@ module.exports = {
 				break;
 			case 'door':
 				if (setChannel(interaction, 'door')) {
-					return interaction.reply('✅ |Channel saved as door channel succesfully.');
+					return interaction.reply('✅ | Channel saved as door channel succesfully.');
 				} else
 					return interaction.reply({
 						content: '❌ | Failed to save channel.',
@@ -57,7 +57,7 @@ module.exports = {
 				break;
 			case 'bell':
 				if (setChannel(interaction, 'bell')) {
-					return interaction.reply('✅ |Channel saved as bell channel succesfully.');
+					return interaction.reply('✅ | Channel saved as bell channel succesfully.');
 				} else
 					return interaction.reply({
 						content: '❌ | Failed to save channel.',

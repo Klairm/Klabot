@@ -5,31 +5,9 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('unset')
 		.setDescription('Unset channel from the usage ( bell , door, favorite messages )')
-		.addChannelOption((option) => option.setName('channel').setDescription('The channel to remove configuration from').setRequired(true))
-		.addSubcommand((subcommand) =>
-			subcommand
-				.setName('favmessage')
-				.setDescription('Unset the channel where favorite message are send,')
-				.addChannelOption((option) =>
-					option.setName('favmessage').setDescription('Channel where the favorite message will be send.').setRequired(true)
-				)
-		)
-		.addSubcommand((subcommand) =>
-			subcommand
-				.setName('door')
-				.setDescription('Unset the channel configuration from door channel.')
-				.addChannelOption((option) =>
-					option.setName('door').setDescription('Unset channel where the bot listens if anyone entered to activate the bell.').setRequired(true)
-				)
-		)
-		.addSubcommand((subcommand) =>
-			subcommand
-				.setName('bell')
-				.setDescription('Unset the channel configuration from bell channel.')
-				.addChannelOption((option) =>
-					option.setName('bell').setDescription('Unset channel where the bell sounds after someone joins the door.').setRequired(true)
-				)
-		),
+		.addSubcommand((subcommand) => subcommand.setName('favmessage').setDescription('Unset the channel where favorite message are send,'))
+		.addSubcommand((subcommand) => subcommand.setName('door').setDescription('Unset the channel configuration from door channel.'))
+		.addSubcommand((subcommand) => subcommand.setName('bell').setDescription('Unset the channel configuration from bell channel.')),
 	async execute(interaction) {
 		if (!interaction.member.permissions.has('MANAGE_CHANNELS'))
 			return interaction.reply({
@@ -58,11 +36,11 @@ module.exports = {
 };
 
 function setChannel(interaction, name) {
-	if (!db.has(`${interaction.guild.id}.${name}`) && db.get(`${interaction.guild.id}.${name}`) == interaction.options.getChannel(name).id) {
+	if (!db.has(`${interaction.guild.id}.${name}`)) {
 		return interaction.reply({ content: "❌ | This channel doesn't have any configuration saved. Maybe wrong channel selected?", ephemeral: true });
 	}
 	if (db.delete(`${interaction.guild.id}.${name}`)) {
-		return interaction.reply('✅ |Channel configuration removed succesfully.');
+		return interaction.reply('✅ | Channel configuration removed succesfully.');
 	} else {
 		return interaction.reply({ content: '❌ | Failed to remove channel configuration.', ephemeral: true });
 	}
