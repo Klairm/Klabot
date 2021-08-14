@@ -1,25 +1,25 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
 module.exports = {
-    name: 'prune',
-    description: 'Prune up to 99 messages.',
-    usage: '-k prune n',
-    execute(message, args) {
-        if (!message.guild.me.hasPermission(MANAGE_MESSAGES)) message.channel.send("I don't have enough permissions.");
-        if (!args.length) {
-            return message.reply("you didn't provide any arguments!");
+	data: new SlashCommandBuilder()
+		.setName('delete')
+		.setDescription('Delete up to 99 messages.')
+		.addIntegerOption((option) => option.setName('integer').setDescription('Number of messages to delete.').setRequired(true)),
 
-        }
-        const amount = parseInt(args[0]) + 1;
+	async execute(interaction) {
+		const amount = interaction.options.getInteger('integer');
+		if (!interaction.guild.me.permissions.has('MANAGE_MESSAGES'))
+			interaction.reply({ content: "❌ | I don't have enough permissions.", ephemeral: true });
+		else if (amount <= 1 || amount > 100) {
+			return interaction.reply({ content: '❌ | You need to enter a number between 1 and 99.', ephemeral: true });
+		}
 
-        if (isNaN(amount)) {
-            return message.reply('that doesn\'t seem to be a valid number.');
-        } else if (amount <= 1 || amount > 100) {
-            return message.reply('you need to input a number between 1 and 99.');
-        }
-
-
-        message.channel.bulkDelete(amount, true).catch(err => {
-            console.error(err);
-            message.channel.send('there was an error trying to prune messages in this channel!');
-        });
-    },
+		interaction.channel
+			.bulkDelete(amount, true)
+			.then(interaction.reply({ content: `✅ | Deleted ${amount} messages successfully.`, ephemeral: true }))
+			.catch((err) => {
+				console.error(err);
+				interaction.reply({ content: '❌ |there was an error trying to prune messages in this channel!', ephemeral: true });
+			});
+	},
 };
