@@ -60,12 +60,11 @@ The favorite message are those that have an reaction with the pill emoji :pill:
 If you want to remove the channels ID, you can use the deleteid command, example:
 
 ```
-/unset bell
-/unset door
-/unset favmessage
+/unset #channel
 ```
 
-This will delete the channel ID of the key specified from the quick.db database.
+This will delete the channel ID from the quick.db database.
+note: the '#' is no needed, it's just an example
 
 ## Music Player
 
