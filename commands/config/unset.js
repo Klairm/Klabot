@@ -4,46 +4,46 @@ const db = require('quick.db');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('unset')
-		.setDescription('Unset channel from the usage ( bell , door, favorite messages )')
+		.setDescription('Unset channel from the usage.')
+		.addChannelOption((option) => option.setName('channel').setDescription('Channel to delete configuration').setRequired(true)),
 
-		// TODO: Just add an option for a channel and check for the key of that ID, then remove it from the database.
-		.addSubcommand((subcommand) => subcommand.setName('favmessage').setDescription('Unset the channel where favorite message are send,'))
-		.addSubcommand((subcommand) => subcommand.setName('door').setDescription('Unset the channel configuration from door channel.'))
-		.addSubcommand((subcommand) => subcommand.setName('bell').setDescription('Unset the channel configuration from bell channel.')),
 	async execute(interaction) {
 		if (!interaction.member.permissions.has('MANAGE_CHANNELS'))
 			return interaction.reply({
 				content: "❌ | You don't have permissions to manage channels.",
 				ephemeral: true,
 			});
-
-		switch (interaction.options.getSubcommand()) {
-			case 'favmessage':
-				setChannel(interaction, 'favmessage');
-				break;
-
-			case 'door':
-				setChannel(interaction, 'door');
-				break;
-
-			case 'bell':
-				setChannel(interaction, 'bell');
-				break;
-
-			default:
-				interaction.reply({ content: '❌ | Need to specify between favmessage, door OR bell.', ephemeral: true });
-				break;
-		}
+		unsetChannel(interaction);
 	},
 };
 
-function setChannel(interaction, name) {
-	if (!db.has(`${interaction.guild.id}.${name}`)) {
-		return interaction.reply({ content: "❌ | This channel doesn't have any configuration saved. Maybe wrong channel selected?", ephemeral: true });
+async function unsetChannel(interaction) {
+	for (let i = 0; i < db.all().length; i++) {
+		if (db.all()[i].ID == interaction.guild.id) {
+			var id = db.all()[i].ID;
+			var values = db.all()[i].data;
+		}
 	}
-	if (db.delete(`${interaction.guild.id}.${name}`)) {
-		return interaction.reply('✅ | Channel configuration removed succesfully.');
-	} else {
-		return interaction.reply({ content: '❌ | Failed to remove channel configuration.', ephemeral: true });
+
+	if (Object.keys(values).length == 0) {
+		return interaction.reply({
+			content: "❌ | This channel doesn't have any configuration saved. Maybe wrong channel selected?",
+			ephemeral: true,
+		});
 	}
+	if (id == undefined) return interaction.reply({ content: "❌ | There's no configuration avaible in this server.", ephemeral: true });
+
+	Object.keys(values).forEach((key) => {
+		if (values[key] == interaction.options.getChannel('channel').id) {
+			if (db.delete(`${interaction.guild.id}.${key}`)) {
+				return interaction.reply('✅ | Channel configuration removed succesfully.');
+			} else {
+				return interaction.reply({ content: '❌ | Failed to remove channel configuration.', ephemeral: true });
+			}
+		} else
+			return interaction.reply({
+				content: "❌ | This channel doesn't have any configuration saved. Maybe wrong channel selected?",
+				ephemeral: true,
+			});
+	});
 }
