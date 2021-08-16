@@ -75,6 +75,10 @@ module.exports = {
 };
 
 function setChannel(interaction, name) {
+	if ((interaction.options.getChannel(name).type == 'GUILD_TEXT' && name == 'door') || name == 'bell')
+		return interaction.reply({ content: '❌ | You selected a text channel, voice channel needed', ephemeral: true });
+	if (interaction.options.getChannel(name).type == 'GUILD_VOICE' && name == 'favmessage')
+		return interaction.reply({ content: '❌ | You selected a voice channel, text channel needed', ephemeral: true });
 	db.set(`${interaction.guild.id}.${name}`, interaction.options.getChannel(name).id);
 	if (db.has(`${interaction.guild.id}.${name}`) && db.get(`${interaction.guild.id}.${name}`) == interaction.options.getChannel(name).id) {
 		return true;
