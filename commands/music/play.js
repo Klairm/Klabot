@@ -31,6 +31,10 @@ module.exports = {
           embeds: [{ title: `❌ | Couldn't load the track!` }],
           empheral: false,
         });
+    } else {
+       queue.data = {
+         channel: interaction.channel,
+       }
     }
     let song = interaction.options.get("song").value;
     await interaction.deferReply();
