@@ -72,7 +72,6 @@ You can reproduce music and YouTube videos with the player commands like: `/play
 
 ## TODO:
 
-- Add a events creation system, so you can schedule reunions, game times, anything with your friends.
 - Add a lock and unlock for voice channels making the bell system more useful.
 - Move from quickDB to MongoDB
 
