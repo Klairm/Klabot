@@ -5,13 +5,10 @@ const {
   Collection,
   Intents,
   MessageSelectMenu,
+  MessageActionRow,
+  MessageButton,
 } = require("discord.js");
 const { Player } = require("discord-music-player");
-const {
-  createAudioPlayer,
-  joinVoiceChannel,
-  createAudioResource,
-} = require("@discordjs/voice");
 
 const { token } = require("./config.json");
 const play = require("./commands/music/play");
@@ -40,12 +37,23 @@ for (const folder of commandFolders) {
 
 client.bellQueue;
 
+const row = new MessageActionRow().addComponents(
+  new MessageButton().setEmoji("⏹").setStyle("DANGER").setCustomId("stop"),
+  new MessageButton().setEmoji("⏸").setStyle("PRIMARY").setCustomId("pause"),
+  new MessageButton().setEmoji("▶").setStyle("PRIMARY").setCustomId("resume"),
+  new MessageButton().setEmoji("⏭").setStyle("PRIMARY").setCustomId("skip")
+);
+
 client.player = new Player(client, {
   leaveOnEmpty: false,
   leaveOnEnd: false,
 });
 
-client.player.on("playlistAdd", (queue, playlist) =>
+/* TODO [Player Events]:
+   Use just one message with the song info and edit that message when the command/button is used
+*/
+
+client.player.on("playlistAdd", (queue, playlist) => {
   queue.data.channel.send({
     embeds: [
       {
@@ -54,9 +62,10 @@ client.player.on("playlistAdd", (queue, playlist) =>
         fields: [{ name: "URL", value: playlist.url }],
       },
     ],
-  })
-);
-client.player.on("songAdd", (queue, song) =>
+    components: [{ row }],
+  });
+});
+client.player.on("songAdd", (queue, song) => {
   queue.data.channel.send({
     embeds: [
       {
@@ -69,10 +78,11 @@ client.player.on("songAdd", (queue, song) =>
         ],
       },
     ],
-  })
-);
+    components: [row],
+  });
+});
 
-client.player.on("songChanged", (queue, newSong) =>
+client.player.on("songChanged", (queue, newSong) => {
   queue.data.channel.send({
     embeds: [
       {
@@ -85,8 +95,10 @@ client.player.on("songChanged", (queue, newSong) =>
         ],
       },
     ],
-  })
-);
+    components: [row],
+  });
+});
+
 client.player.on("error", (error) => console.log(error));
 
 client.once("ready", async () => {
@@ -169,8 +181,19 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
 });
 
 client.on("interactionCreate", async (interaction) => {
-  if (!interaction.isCommand()) return;
+  if (interaction.isButton()) {
+    try {
+      await client.commands.get(interaction.customId).execute(interaction);
+    } catch (error) {
+      console.error(error);
+      return interaction.reply({
+        content: "❌ | There was an error while executing this command!",
+        ephemeral: true,
+      });
+    }
+  }
 
+  if (!interaction.isCommand()) return;
   try {
     await client.commands.get(interaction.commandName).execute(interaction);
   } catch (error) {
@@ -265,10 +288,6 @@ client.on("messageCreate", async (message) => {
     /\.ru\//,
     /free nudes/,
     /\.ru\.com\//,
-
-    // bots like to mention everyone despite not being possible
-    /@everyone(.*)https?:\/\//,
-    /https?:\/\/(.*)@everyone/,
   ];
   const links = ["http://", "https://"];
 
