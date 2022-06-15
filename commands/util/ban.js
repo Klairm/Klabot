@@ -1,39 +1,48 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('ban')
-    .setDescription('Ban a member.')
+    .setName("ban")
+    .setDescription("Ban a member.")
     .addUserOption((option) =>
       option
-        .setName('member')
-        .setDescription('Mmeber to kick')
+        .setName("member")
+        .setDescription("Memeber to ban")
         .setRequired(true)
     ),
   async execute(interaction) {
-    if (!interaction.options.getMember('member'))
+    if (!interaction.options.getMember("member"))
       return interaction.reply({
-        content: "That member doesn't exists!",
+        embeds: [{ title: "❌ | That member doesn't exists!" }],
         ephemeral: true,
       });
-    const hammered = interaction.options.getMember('member').user.username;
-    if (!interaction.member.permissions.has('BAN_MEMBERS')) {
-      return interaction.reply("you don't have permissions to do that, idiot.");
+    const hammered = interaction.options.getMember("member").user.username;
+    if (!interaction.member.permissions.has("BAN_MEMBERS")) {
+      return interaction.reply({
+        embeds: [
+          { title: "❌ | You don't have permissions to do that, idiot." },
+        ],
+        ephemeral: true,
+      });
     }
 
-    if (!interaction.options.getMember('member').bannable) {
+    if (!interaction.options.getMember("member").bannable) {
       return interaction.reply({
-        content: "I can't ban that member",
+        embeds: [{ title: "❌ | I can't ban that member" }],
         ephemeral: true,
       });
     } else {
-      if (!interaction.options.getMember('member').ban()) {
+      if (!interaction.options.getMember("member").ban()) {
         interaction.reply({
-          content: 'something went wrong.',
+          embeds: [
+            { title: "❌ | Something went wrong trying to ban that member." },
+          ],
           ephemeral: true,
         });
       } else {
-        interaction.reply(`Banned ${hammered}  succesfully.`);
+        interaction.reply({
+          embeds: [{ title: `✅ | Banned ${hammered}  succesfully.` }],
+        });
       }
     }
   },

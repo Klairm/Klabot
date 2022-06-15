@@ -13,7 +13,7 @@ module.exports = {
 
   async execute(interaction) {
     let existingQueue = !interaction.client.bellQueue ? false : true;
-    
+
     if (!interaction.member.voice.channelId)
       return await interaction.reply({
         embeds: [{ title: "❌ | You are not in a voice channel!" }],
@@ -32,9 +32,9 @@ module.exports = {
           empheral: false,
         });
     } else {
-       queue.data = {
-         channel: interaction.channel,
-       }
+      queue.data = {
+        channel: interaction.channel,
+      };
     }
     let song = interaction.options.get("song").value;
     await interaction.deferReply();

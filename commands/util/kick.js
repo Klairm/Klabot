@@ -10,30 +10,40 @@ module.exports = {
         .setDescription('Member to kick')
         .setRequired(true)
     ),
-  async execute(interaction) {
-    if (!interaction.options.getMember('member'))
-      return interaction.reply({
-        content: "That member doesn't exists!",
-        ephemeral: true,
-      });
-    const assKicked = interaction.options.getMember('member').user.username;
-    if (!interaction.member.permissions.has('KICK_MEMBERS')) {
-      return interaction.reply("you don't have permissions to do that, idiot.");
-    }
-    if (!interaction.options.getMember('member').kickable) {
-      return interaction.reply({
-        content: "I can't kick that member",
-        ephemeral: true,
-      });
-    } else {
-      if (!interaction.options.getMember('member').kick()) {
-        interaction.reply({
-          content: 'something went wrong.',
+    async execute(interaction) {
+      if (!interaction.options.getMember("member"))
+        return interaction.reply({
+          embeds: [{ title: "❌ | That member doesn't exists!" }],
+          ephemeral: true,
+        });
+      const hammered = interaction.options.getMember("member").user.username;
+      if (!interaction.member.permissions.has("KICK_MEMBERS")) {
+        return interaction.reply({
+          embeds: [
+            { title: "❌ | You don't have permissions to do that, idiot." },
+          ],
+          ephemeral: true,
+        });
+      }
+  
+      if (!interaction.options.getMember("member").kickable) {
+        return interaction.reply({
+          embeds: [{ title: "❌ | I can't ban that member" }],
           ephemeral: true,
         });
       } else {
-        interaction.reply(`Kicked ${assKicked}  succesfully.`);
+        if (!interaction.options.getMember("member").kick()) {
+          interaction.reply({
+            embeds: [
+              { title: "❌ | Something went wrong trying to kick that member." },
+            ],
+            ephemeral: true,
+          });
+        } else {
+          interaction.reply({
+            embeds: [{ title: `✅ | Kicked ${hammered}  succesfully.` }],
+          });
+        }
       }
-    }
-  },
-};
+    },
+  };

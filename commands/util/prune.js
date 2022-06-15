@@ -22,7 +22,7 @@ module.exports = {
 			.then(await interaction.reply({ content: `✅ | Deleted ${amount} messages successfully.`, ephemeral: true }))
 			.catch((err) => {
 				console.error(err);
-				interaction.reply({ content: '❌ |there was an error trying to prune messages in this channel!', ephemeral: true });
+				interaction.reply({ content: '❌ | There was an error trying to prune messages in this channel!', ephemeral: true });
 			});
 	},
 };

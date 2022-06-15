@@ -26,7 +26,7 @@ module.exports = {
       fields: [
         {
           name: `${interaction.guild.name}`,
-          value: `Server ID: ${interaction.guild.id}\nServer Name: ${interaction.guild.name}\nServer Owner: ${owner}\nServer Creation: ${interaction.guild.createdAt}\nServer Region: ${interaction.guild.region}\nTotal Nitro Boosters: ${interaction.guild.premiumSubscriptionCount}\nTotal Members: ${interaction.guild.memberCount}`,
+          value: `Server ID: ${interaction.guild.id}\nServer Name: ${interaction.guild.name}\nServer Owner: ${owner}\nServer Creation: ${interaction.guild.createdAt}\nTotal Nitro Boosters: ${interaction.guild.premiumSubscriptionCount}\nTotal Members: ${interaction.guild.memberCount}`,
           inline: true,
         },
       ],
