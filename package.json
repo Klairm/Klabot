@@ -4,7 +4,7 @@
     "@discordjs/rest": "^0.1.0-canary.0",
     "@discordjs/voice": "^0.7.5",
     "discord-api-types": "^0.25.2",
-    "discord-music-player": "^8.3.1",
+    "discord-music-player": "^9.0.2",
     "discord.js": "^13.3.1",
     "ohmyfetch": "^0.4.14",
     "opusscript": "^0.0.8",
