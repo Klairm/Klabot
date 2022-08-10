@@ -1,25 +1,29 @@
 const fs = require("fs");
-const db = require("quick.db");
+const { QuickDB } = require("quick.db");
+const db = new QuickDB();
 const {
   Client,
   Collection,
-  Intents,
-  MessageSelectMenu,
-  MessageActionRow,
-  MessageButton,
+  GatewayIntentBits,
+  Partials,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  InteractionType,
 } = require("discord.js");
 const { Player } = require("discord-music-player");
 
 const { token } = require("./config.json");
 const play = require("./commands/music/play");
+const { resourceUsage } = require("process");
 const client = new Client({
-  partials: ["MESSAGE", "CHANNEL", "REACTION"],
+  partials: [Partials.Message, Partials.Channel, Partials.Reaction],
   intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MEMBERS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-    Intents.FLAGS.GUILD_VOICE_STATES,
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions,
+    GatewayIntentBits.GuildVoiceStates,
   ],
 });
 client.commands = new Collection();
@@ -37,15 +41,27 @@ for (const folder of commandFolders) {
 
 client.bellQueue;
 
-const row = new MessageActionRow().addComponents(
-  new MessageButton().setEmoji("⏹").setStyle("DANGER").setCustomId("stop"),
-  new MessageButton().setEmoji("⏸").setStyle("PRIMARY").setCustomId("pause"),
-  new MessageButton().setEmoji("▶").setStyle("PRIMARY").setCustomId("resume"),
-  new MessageButton().setEmoji("⏭").setStyle("PRIMARY").setCustomId("skip")
+const row = new ActionRowBuilder().addComponents(
+  new ButtonBuilder()
+    .setEmoji("⏹")
+    .setStyle(ButtonStyle.Danger)
+    .setCustomId("stop"),
+  new ButtonBuilder()
+    .setEmoji("⏸")
+    .setStyle(ButtonStyle.Primary)
+    .setCustomId("pause"),
+  new ButtonBuilder()
+    .setEmoji("▶")
+    .setStyle(ButtonStyle.Primary)
+    .setCustomId("resume"),
+  new ButtonBuilder()
+    .setEmoji("⏭")
+    .setStyle(ButtonStyle.Primary)
+    .setCustomId("skip")
 );
 
 client.player = new Player(client, {
-  leaveOnEmpty: false,
+  leaveOnEmpty: true,
   leaveOnEnd: false,
 });
 
@@ -88,7 +104,7 @@ client.player.on("songChanged", (queue, newSong) => {
       {
         title: newSong.name,
         description: `✅ | Now playing ${newSong.name}`,
-        thumbnail: newSong.thumbnail,
+        thumbnail: { url: newSong.thumbnail },
         fields: [
           { name: "Duration", value: newSong.duration },
           { name: "URL", value: newSong.url },
@@ -99,7 +115,7 @@ client.player.on("songChanged", (queue, newSong) => {
   });
 });
 
-client.player.on("error", (error) => console.log(error));
+client.player.on("error", (error) => console.error(error));
 
 client.once("ready", async () => {
   var date = new Date();
@@ -158,11 +174,11 @@ client.on("messageReactionAdd", async (reaction, user) => {
 client.on("voiceStateUpdate", async (oldState, newState) => {
   // Making sure the member entered is not a bot, and that that guild has the bell system configured
   if (newState.member.user.bot) return;
-  if (!db.has(`${newState.guild.id}.bell`)) return;
-  if (!db.has(`${newState.guild.id}.door`)) return;
+  if (!(await db.has(`${newState.guild.id}.bell`))) return;
+  if (!(await db.has(`${newState.guild.id}.door`))) return;
   let newUserChannel = newState.channel;
-  const bell = db.get(`${newState.guild.id}.bell`);
-  const door = db.get(`${newState.guild.id}.door`);
+  const bell = await db.get(`${newState.guild.id}.bell`);
+  const door = await db.get(`${newState.guild.id}.door`);
 
   // We create a new queue using our player from discord-music-player then  try to join the bell channel
   client.bellQueue = client.player.createQueue(newState.guild.id, {
@@ -183,6 +199,8 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
 client.on("interactionCreate", async (interaction) => {
   if (interaction.isButton()) {
     try {
+      console.log(interaction.customId);
+
       await client.commands.get(interaction.customId).execute(interaction);
     } catch (error) {
       console.error(error);
@@ -193,7 +211,7 @@ client.on("interactionCreate", async (interaction) => {
     }
   }
 
-  if (!interaction.isCommand()) return;
+  if (interaction.type != InteractionType.ApplicationCommand) return;
   try {
     await client.commands.get(interaction.commandName).execute(interaction);
   } catch (error) {
@@ -282,7 +300,6 @@ client.on("messageCreate", async (message) => {
     /get 3 months/,
     /get 1 month/,
     /3 months of discord nitro/,
-    ///nitro for 3 months/, this is very risky will take a look
     /free steam give nitro/,
     /nitro steam for free/,
     /\.ru\//,

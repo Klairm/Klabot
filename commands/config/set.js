@@ -1,5 +1,6 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const db = require("quick.db");
+const { SlashCommandBuilder, ChannelType } = require("discord.js");
+const {QuickDB} = require("quick.db");
+const db = new QuickDB();
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -97,9 +98,9 @@ module.exports = {
   },
 };
 
-function setChannel(interaction, name) {
+async function setChannel(interaction, name) {
   if (
-    interaction.options.getChannel(name).type == "GUILD_TEXT" &&
+    interaction.options.getChannel(name).type == ChannelType.GuildText &&
     (name == "door" || name == "bell")
   )
     return interaction.reply({
@@ -107,20 +108,20 @@ function setChannel(interaction, name) {
       ephemeral: true,
     });
   if (
-    interaction.options.getChannel(name).type == "GUILD_VOICE" &&
+    interaction.options.getChannel(name).type == ChannelType.GuildVoice &&
     name == "favmessage"
   )
     return interaction.reply({
       content: "❌ | You selected a voice channel, text channel needed",
       ephemeral: true,
     });
-  db.set(
+  await db.set(
     `${interaction.guild.id}.${name}`,
     interaction.options.getChannel(name).id
   );
   if (
-    db.has(`${interaction.guild.id}.${name}`) &&
-    db.get(`${interaction.guild.id}.${name}`) ==
+    await  db.has(`${interaction.guild.id}.${name}`) &&
+    await db.get(`${interaction.guild.id}.${name}`) ==
       interaction.options.getChannel(name).id
   ) {
     return true;
