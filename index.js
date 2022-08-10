@@ -199,8 +199,6 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
 client.on("interactionCreate", async (interaction) => {
   if (interaction.isButton()) {
     try {
-      console.log(interaction.customId);
-
       await client.commands.get(interaction.customId).execute(interaction);
     } catch (error) {
       console.error(error);
