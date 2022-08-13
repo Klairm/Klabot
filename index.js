@@ -15,7 +15,7 @@ const { Player } = require("discord-music-player");
 
 const { token } = require("./config.json");
 const play = require("./commands/music/play");
-const { resourceUsage } = require("process");
+
 const client = new Client({
   partials: [Partials.Message, Partials.Channel, Partials.Reaction],
   intents: [
@@ -42,31 +42,22 @@ for (const folder of commandFolders) {
 client.bellQueue;
 
 const row = new ActionRowBuilder().addComponents(
-  new ButtonBuilder()
-    .setEmoji("⏹")
-    .setStyle(ButtonStyle.Danger)
-    .setCustomId("stop"),
-  new ButtonBuilder()
-    .setEmoji("⏸")
-    .setStyle(ButtonStyle.Primary)
-    .setCustomId("pause"),
-  new ButtonBuilder()
-    .setEmoji("▶")
-    .setStyle(ButtonStyle.Primary)
-    .setCustomId("resume"),
-  new ButtonBuilder()
-    .setEmoji("⏭")
-    .setStyle(ButtonStyle.Primary)
-    .setCustomId("skip")
+  new ButtonBuilder().setEmoji("⏹").setStyle(ButtonStyle.Danger).setCustomId("stop"),
+  new ButtonBuilder().setEmoji("⏸").setStyle(ButtonStyle.Primary).setCustomId("pause"),
+  new ButtonBuilder().setEmoji("▶").setStyle(ButtonStyle.Primary).setCustomId("resume"),
+  new ButtonBuilder().setEmoji("⏭").setStyle(ButtonStyle.Primary).setCustomId("skip")
 );
 
 client.player = new Player(client, {
-  leaveOnEmpty: true,
+  leaveOnEmpty: false,
   leaveOnEnd: false,
 });
 
 /* TODO [Player Events]:
    Use just one message with the song info and edit that message when the command/button is used
+
+   TODO [Client Events]:
+   Handle all events in individual files 
 */
 
 client.player.on("playlistAdd", (queue, playlist) => {
@@ -115,22 +106,14 @@ client.player.on("songChanged", (queue, newSong) => {
   });
 });
 
-client.player.on("error", (error) => console.error(error));
+client.player.on("error", (error) => console.error("[ERROR]" + error));
 
 client.once("ready", async () => {
-  var date = new Date();
-  console.log(
-    "-----------------------------------------------------------------------------"
-  );
+  let date = new Date();
+  console.log("-----------------------------------------------------------------------------");
   console.log(`Ready at ${date}`);
-  console.log(
-    `Bot avaible in: \n${client.guilds.cache
-      .map((guild) => guild.name)
-      .join("\n")}`
-  );
-  console.log(
-    "-----------------------------------------------------------------------------"
-  );
+  console.log(`Bot avaible in: \n${client.guilds.cache.map((guild) => guild.name).join("\n")}`);
+  console.log("-----------------------------------------------------------------------------");
 });
 
 client.on("messageReactionAdd", async (reaction, user) => {
@@ -186,8 +169,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
   });
 
   await client.bellQueue.join(bell);
-  if (!client.bellQueue)
-    console.log(`[ERRO] Error joining the bell channel at ${new Date()}`);
+  if (!client.bellQueue) console.log(`[ERROR] Error joining the bell channel at ${new Date()}`);
 
   // Finally we check if the channel that the new user entered in is the door channel, playing the bell sound.
 
@@ -248,7 +230,7 @@ client.on("messageCreate", async (message) => {
     /steamcommunity\.link/,
 
     // There is this CSGO scam-bot
-    //https:\/\/prnt\.sc\//, <-- causing problems
+
     /i will accept all trades/,
     /i'm tired of csgo/,
 
@@ -295,8 +277,7 @@ client.on("messageCreate", async (message) => {
     /discordapp\.([abd-mo-z]|c[a-n][p-z]|n[a-df-z])/,
 
     // risky, but i think worth
-    /get 3 months/,
-    /get 1 month/,
+
     /3 months of discord nitro/,
     /free steam give nitro/,
     /nitro steam for free/,
@@ -318,9 +299,7 @@ client.on("messageCreate", async (message) => {
       );
     else
       message.member.ban()
-        ? message.channel.send(
-            `${spammer} got banned succesfully for spamming!`
-          )
+        ? message.channel.send(`${spammer} got banned succesfully for spamming!`)
         : message.send("Something went wrong trying to ban the spammer!");
     message.delete()
       ? console.log("deleted spam message")

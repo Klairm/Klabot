@@ -4,8 +4,8 @@ Klabot is a really useless Discord Bot created using DiscordJS and quickDB
 
 # Requirements
 
-- NodeJS v16.6 or higher
-- DiscordJSv13 `npm install discord.js  @discordjs/voice sodium`
+- NodeJS v16.9 or higher
+- DiscordJSv14 `npm install discord.js @discordjs/voice sodium`
 - QuickDB `npm install quick.db`
 - Discord-Music-Player `npm install discord-music-player ` + `npm install @discordjs/opus`
 
@@ -13,12 +13,16 @@ You also need a file named `config.json` with your token from the [Discord Devel
 
 ```json
 {
-	"token": "YOUR_TOKEN_HERE"
+  "token": "YOUR_TOKEN_HERE",
+  /* clientId and guildId just used for register the commands with the commands.js script
+	for more information check out : https://discordjs.guide/interactions/slash-commands.html#registering-slash-commands
+	*/
+  "clientId": "CLIENT_ID_HERE",
+  "guildId": "GUILD_ID_HERE"
 }
 ```
 
 For the assets you need to place them on a folder called assets, name the image as liK.png, or change the name on the source.
-Also you need a bell.mp3 file on the root for the bell sound, or again change the name on the source.
 
 # Usage
 
@@ -28,7 +32,7 @@ You need to register the slash commands to the client, for more info check the g
 
 Klabot has a system that will play an audio on A voice channel when someone joins B voice channel, at the moment is not really useless, but in a future commands to
 allow users join A voice channel if it's unlocked.
-For use this, Klabot needs 2 voice channels: Channel where the .mp3 audio will be played ( A channel ),
+For use this, Klabot needs 2 voice channels: Channel where the bell audio will be played ( A channel ),
 and the channel where the bot will be looking if someone is in ( B channel)
 
 For set this channels you can use the bell and door commands, example:

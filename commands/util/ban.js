@@ -1,15 +1,11 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("ban")
     .setDescription("Ban a member.")
-    .addUserOption((option) =>
-      option
-        .setName("member")
-        .setDescription("Memeber to ban")
-        .setRequired(true)
-    ),
+    .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+    .addUserOption((option) => option.setName("member").setDescription("Memeber to ban").setRequired(true)),
   async execute(interaction) {
     if (!interaction.options.getMember("member"))
       return interaction.reply({
@@ -17,14 +13,6 @@ module.exports = {
         ephemeral: true,
       });
     const hammered = interaction.options.getMember("member").user.username;
-    if (!interaction.member.permissions.has("BAN_MEMBERS")) {
-      return interaction.reply({
-        embeds: [
-          { title: "❌ | You don't have permissions to do that, idiot." },
-        ],
-        ephemeral: true,
-      });
-    }
 
     if (!interaction.options.getMember("member").bannable) {
       return interaction.reply({
@@ -34,9 +22,7 @@ module.exports = {
     } else {
       if (!interaction.options.getMember("member").ban()) {
         interaction.reply({
-          embeds: [
-            { title: "❌ | Something went wrong trying to ban that member." },
-          ],
+          embeds: [{ title: "❌ | Something went wrong trying to ban that member." }],
           ephemeral: true,
         });
       } else {
