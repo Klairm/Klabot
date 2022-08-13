@@ -3,16 +3,12 @@ const { AttachmentBuilder, SlashCommandBuilder } = require("discord.js");
 const file = new AttachmentBuilder("assets/liK.png");
 
 module.exports = {
-  data: new SlashCommandBuilder()
-    .setName("server")
-    .setDescription("Display info about this server."),
+  data: new SlashCommandBuilder().setName("server").setDescription("Display info about this server."),
   async execute(interaction) {
     let owner;
-    await interaction.client.users
-      .fetch(interaction.guild.ownerId)
-      .then((user) => {
-        owner = user.username;
-      });
+    await interaction.client.users.fetch(interaction.guild.ownerId).then((user) => {
+      owner = user.username;
+    });
 
     const serverInfo = {
       title: "Server Info",
