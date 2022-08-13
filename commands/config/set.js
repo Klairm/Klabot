@@ -53,7 +53,7 @@ module.exports = {
 
 async function setChannel(interaction, name) {
   // TODO: Rework this function
-  // TODO:  handle duplication id's: there's shouldn't be 2 channels with the same ID
+  // TODO:  handle duplication id's: there shouldn't be 2 channels with the same ID
   if (interaction.options.getChannel(name).type == ChannelType.GuildText && (name == "door" || name == "bell"))
     return interaction.reply({
       embeds: [{ title: "❌ | You selected a text channel, voice channel needed" }],

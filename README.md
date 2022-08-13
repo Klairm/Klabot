@@ -14,9 +14,12 @@ You also need a file named `config.json` with your token from the [Discord Devel
 ```json
 {
   "token": "YOUR_TOKEN_HERE",
-  /* clientId and guildId just used for register the commands with the commands.js script
-	for more information check out : https://discordjs.guide/interactions/slash-commands.html#registering-slash-commands
-	*/
+  "__comment" : "
+    THIS IS A COMMENT OFC NOT NEEDED IN YOUR config.json
+    
+    clientId and guildId just used for register the commands with the commands.js script
+    for more information check out : https://discordjs.guide/interactions/slash-commands.html#registering-slash-commands",
+
   "clientId": "CLIENT_ID_HERE",
   "guildId": "GUILD_ID_HERE"
 }
