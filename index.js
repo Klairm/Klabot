@@ -24,6 +24,7 @@ const client = new Client({
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildMessageReactions,
     GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.MessageContent,
   ],
 });
 client.commands = new Collection();
@@ -147,7 +148,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
     };
 
     reaction.message.guild.channels.cache
-      .get(db.get(`${reaction.message.guild.id}.favmessage`))
+      .get(db.get(await `${reaction.message.guild.id}.favmessage`))
       .send({
         embeds: [favMessage],
       });
