@@ -70,7 +70,7 @@ client.player.on("playlistAdd", (queue, playlist) => {
         fields: [{ name: "URL", value: playlist.url }],
       },
     ],
-    components: [{ row }],
+    components: [ row ],
   });
 });
 client.player.on("songAdd", (queue, song) => {
