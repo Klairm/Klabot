@@ -8,7 +8,7 @@
     "discord-music-player": "^9.1.1",
     "discord.js": "^14.6.0",
     "isomorphic-unfetch": "^3.1.0",
-    "ohmyfetch": "^0.4.19",
+    "ohmyfetch": "^0.4.20",
     "opusscript": "^0.0.8",
     "quick.db": "^9.0.6",
     "sodium": "^3.0.2",
