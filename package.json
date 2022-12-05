@@ -6,7 +6,7 @@
     "better-sqlite3": "^7.6.2",
     "discord-api-types": "^0.37.18",
     "discord-music-player": "^9.1.1",
-    "discord.js": "^14.6.0",
+    "discord.js": "^14.7.1",
     "isomorphic-unfetch": "^3.1.0",
     "ohmyfetch": "^0.4.21",
     "opusscript": "^0.0.8",
