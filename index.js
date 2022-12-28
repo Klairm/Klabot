@@ -310,5 +310,13 @@ client.on("messageCreate", async (message) => {
 client.on("error", async (error) => {
   console.log("❌ | An error has ocurred", error);
 });
+/* aportación del ruso */
 
+client.on("messageCreate". (quebueno) => {
+  if (quebueno.content == "que") {
+    quebueno.channel.send("https://media.discordapp.net/attachments/664187293451419678/1034078773928267876/image0.jpg");
+  } else {
+    return;
+  };
+});
 client.login(token);
