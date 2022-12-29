@@ -58,7 +58,7 @@ client.player = new Player(client, {
    Use just one message with the song info and edit that message when the command/button is used
 
    TODO [Client Events]:
-   Handle all events in individual files 
+   Handle all events in individual files
 */
 
 client.player.on("playlistAdd", (queue, playlist) => {
@@ -205,6 +205,12 @@ client.on("interactionCreate", async (interaction) => {
 });
 client.on("messageCreate", async (message) => {
   // https://github.com/makigas/makibot/blob/trunk/src/hooks/csgo.ts thx danirod
+  if (message.guild.id === "666042655259754497" && message.content == "que") {
+    message.channel.send("https://cdn.discordapp.com/attachments/664187293451419678/1034078773928267876/image0.jpg");
+  } else {
+    return
+  };
+
   const TOKENS = [
     // Different variations of steamcommunity.
     /steamcommmunlity\.com/,
