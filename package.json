@@ -4,7 +4,7 @@
     "@discordjs/rest": "^1.5.0",
     "@discordjs/voice": "^0.14.0",
     "better-sqlite3": "^8.0.1",
-    "discord-api-types": "^0.37.27",
+    "discord-api-types": "^0.37.28",
     "discord-music-player": "^9.1.1",
     "discord.js": "^14.7.1",
     "isomorphic-unfetch": "^3.1.0",
