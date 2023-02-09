@@ -62,8 +62,7 @@ module.exports = {
   },
 };
 
-
-function checkChannel(interaction, name){
+function checkChannel(interaction, name) {
   if (
     interaction.options.getChannel(name).type == ChannelType.GuildText &&
     (name == "door" || name == "bell")
@@ -84,9 +83,10 @@ function checkChannel(interaction, name){
 async function setChannel(interaction, name) {
   // TODO: Rework this function
   // TODO:  handle duplication id's: there shouldn't be 2 channels with the same ID
-  checkChannel()
+  checkChannel(interaction, name);
 
-  await db.set(`${interaction.guild.id}.${name}`, interaction.options.getChannel(name).id)
+  await db
+    .set(`${interaction.guild.id}.${name}`, interaction.options.getChannel(name).id)
     .then(async () => {
       // Handle bell channel permissions: deny view channel permission for @everyone
       if (name == "bell") {

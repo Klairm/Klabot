@@ -41,8 +41,7 @@ for (const folder of commandFolders) {
 }
 
 client.bellQueue;
-
-const row = new ActionRowBuilder().addComponents(
+const musicRow = new ActionRowBuilder().addComponents(
   new ButtonBuilder().setEmoji("⏹").setStyle(ButtonStyle.Danger).setCustomId("stop"),
   new ButtonBuilder().setEmoji("⏸").setStyle(ButtonStyle.Primary).setCustomId("pause"),
   new ButtonBuilder().setEmoji("▶").setStyle(ButtonStyle.Primary).setCustomId("resume"),
@@ -70,7 +69,7 @@ client.player.on("playlistAdd", (queue, playlist) => {
         fields: [{ name: "URL", value: playlist.url }],
       },
     ],
-    components: [ row ],
+    components: [musicRow],
   });
 });
 client.player.on("songAdd", (queue, song) => {
@@ -86,7 +85,7 @@ client.player.on("songAdd", (queue, song) => {
         ],
       },
     ],
-    components: [row],
+    components: [musicRow],
   });
 });
 
@@ -103,7 +102,7 @@ client.player.on("songChanged", (queue, newSong) => {
         ],
       },
     ],
-    components: [row],
+    components: [musicRow],
   });
 });
 
@@ -156,17 +155,19 @@ client.on("messageReactionAdd", async (reaction, user) => {
 });
 
 client.on("voiceStateUpdate", async (oldState, newState) => {
-  // Making sure the member entered is not a bot, and that that guild has the bell system configured
+  // Making sure the member entered is not a bot, and that the guild has the bell system configured
   if (newState.member.user.bot) return;
+
   if (!(await db.has(`${newState.guild.id}.bell`))) return;
   if (!(await db.has(`${newState.guild.id}.door`))) return;
   let newUserChannel = newState.channel;
+  let newUser = newState.member;
   const bell = await db.get(`${newState.guild.id}.bell`);
   const door = await db.get(`${newState.guild.id}.door`);
 
   // We create a new queue using our player from discord-music-player then  try to join the bell channel
   client.bellQueue = client.player.createQueue(newState.guild.id, {
-    data: { channel: newUserChannel },
+    data: { channel: newState.guild.channels.cache.get(bell) },
   });
 
   await client.bellQueue.join(bell);
@@ -175,14 +176,40 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
   // Finally we check if the channel that the new user entered in is the door channel, playing the bell sound.
 
   if (newUserChannel == door) {
-    await client.bellQueue.play("https://www.youtube.com/watch?v=NTcvsaw9fp8");
+    var userDoorData = { door: newUser.id };
+    const doorRow = new ActionRowBuilder().addComponents(
+      new ButtonBuilder()
+        .setEmoji("🔓")
+        .setStyle(ButtonStyle.Success)
+        .setCustomId(JSON.stringify(userDoorData))
+    );
+    await client.bellQueue.play("https://www.youtube.com/watch?v=NTcvsaw9fp8").then(() => {
+      client.channels.cache.get(bell).send({
+        embeds: [
+          {
+            title: `${newUser.user.username} wants to enter, allow? `,
+          },
+        ],
+        components: [doorRow],
+      });
+    });
   }
 });
 
 client.on("interactionCreate", async (interaction) => {
   if (interaction.isButton()) {
     try {
-      await client.commands.get(interaction.customId).execute(interaction);
+      if (interaction.customId.includes("door")) {
+        var user = JSON.parse(interaction.customId);
+        interaction.deferUpdate();
+        await interaction.guild.members.cache
+          .get(user.door.toString())
+          .voice.setChannel(
+            interaction.client.channels.cache.get(await db.get(`${interaction.guild.id}.bell`))
+          );
+      } else {
+        await client.commands.get(interaction.customId).execute(interaction);
+      }
     } catch (error) {
       console.error(error);
       return interaction.reply({
@@ -204,10 +231,13 @@ client.on("interactionCreate", async (interaction) => {
   }
 });
 client.on("messageCreate", async (message) => {
-  if (message.guild.id === "666042655259754497" && message.content == "que") message.channel.send("https://cdn.discordapp.com/attachments/664187293451419678/1034078773928267876/image0.jpg");
-  
+  if (message.guild.id === "666042655259754497" && message.content == "que")
+    message.channel.send(
+      "https://cdn.discordapp.com/attachments/664187293451419678/1034078773928267876/image0.jpg"
+    );
+
   // https://github.com/makigas/makibot/blob/trunk/src/hooks/csgo.ts thx danirod
-  
+
   const TOKENS = [
     // Different variations of steamcommunity.
     /steamcommmunlity\.com/,

@@ -11,15 +11,11 @@ Klabot is a really useless Discord Bot created using DiscordJS and quickDB
 
 You also need a file named `config.json` with your token from the [Discord Developer Portal](https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot),the file should look like this:
 
+note: clientId and guildId just used for register the commands with the commands.js script, for more info check out : https://discordjs.guide/interactions/slash-commands.html#registering-slash-commands",
+
 ```json
 {
   "token": "YOUR_TOKEN_HERE",
-  "__comment" : "
-    THIS IS A COMMENT OFC NOT NEEDED IN YOUR config.json
-    
-    clientId and guildId just used for register the commands with the commands.js script
-    for more information check out : https://discordjs.guide/interactions/slash-commands.html#registering-slash-commands",
-
   "clientId": "CLIENT_ID_HERE",
   "guildId": "GUILD_ID_HERE"
 }
@@ -33,8 +29,7 @@ You need to register the slash commands to the client, for more info check the g
 
 ## "Bell" System
 
-Klabot has a system that will play an audio on A voice channel when someone joins B voice channel, at the moment is not really useless, but in a future commands to
-allow users join A voice channel if it's unlocked.
+Klabot has a system that will play an audio on A voice channel when someone joins B voice channel, also, in the text channel from channel B, a message will apparear to move the user from channel A to channel B
 For use this, Klabot needs 2 voice channels: Channel where the bell audio will be played ( A channel ),
 and the channel where the bot will be looking if someone is in ( B channel)
 
@@ -79,8 +74,8 @@ You can reproduce music and YouTube videos with the player commands like: `/play
 
 ## TODO:
 
-- Add a lock and unlock for voice channels making the bell system more useful.
 - Move from quickDB to MongoDB
+- Handle all events in individual files
 
  <p align=center>
  <img src="https://i.imgur.com/b6aCKA2.png"/>
