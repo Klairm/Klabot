@@ -14,7 +14,6 @@ const {
 const { Player } = require("discord-music-player");
 
 const { token } = require("./config.json");
-const play = require("./commands/music/play");
 
 const client = new Client({
   partials: [Partials.Message, Partials.Channel, Partials.Reaction],
@@ -235,110 +234,6 @@ client.on("messageCreate", async (message) => {
     message.channel.send(
       "https://cdn.discordapp.com/attachments/664187293451419678/1034078773928267876/image0.jpg"
     );
-
-  // https://github.com/makigas/makibot/blob/trunk/src/hooks/csgo.ts thx danirod
-
-  const TOKENS = [
-    // Different variations of steamcommunity.
-    /steamcommmunlity\.com/,
-    /steamcommmunlity\.com/,
-    /steamcconuunity\.co/,
-    /steamcomminutiu\.ru/,
-    /steamcomminytiy\.ru/,
-    /steamcommnuntiy\.com/,
-    /steamcommunityu\.com/,
-    /steamcommunlty\.pro/,
-    /steamcommuntry\.ru/,
-    /steamcommunytiu\.com/,
-    /steamcomnmuituy\.com/,
-    /steancommuniit\.ru/,
-    /steancomunnity\.ru/,
-    /stearmcommunitty\.ru/,
-    /stearmcommunity\.ru/,
-    /stearncommunytiy\.ru/,
-    /stearncormmunity\.com/,
-    /stearncormunsity\.com/,
-    /stermccommunitty\.ru/,
-    /stiemcommunitty\.ru/,
-    /steamcommrnunity\.com/,
-    /steamcommunity\.link/,
-
-    // There is this CSGO scam-bot
-
-    /i will accept all trades/,
-    /i'm tired of csgo/,
-
-    // No one will give you nitro for free
-    //Alphabetical ordered list
-    //[a-z]
-    /dlscord\.info/,
-    /dlscord\.ink/,
-    /dlscord\.gifts/,
-    /discord\.giveawey.com/,
-    /dlscord\.nitro/,
-    /dlscord\.help/,
-    /dlscord\.pro/,
-    /discortnitosteam\.online/,
-    /discortnitosteam\.online/,
-    //[-]
-    /discorcd-apps\.com/,
-    /discord-help\./,
-    /dicsord-nitro\./,
-    /discord-nitre\./,
-    /dlscord-nitro\./,
-    /discrode-gift\./,
-    /gave-nitro\./,
-    /discord-nitre\./,
-
-    // Update
-    /rust-way\.com/,
-    /twitch\.rust-ltd\.com/,
-    /:\/\/discord-nitro\./,
-    /discorcl\.link/,
-    /discorcl\.click/,
-    /discordapp\.click/,
-    /discordapp\.link/,
-    /discgrd\./,
-    /disczrd\./,
-    /dlscord-app.su\./,
-    /discord-go\./,
-    /discord-best-nitro\./,
-
-    // I don't have time for this shit
-    /discorcl\.[a-z]/,
-    /discord-app\./,
-    /dlscord\.[a-z]/,
-    /discordapp\.([abd-mo-z]|c[a-n][p-z]|n[a-df-z])/,
-
-    // risky, but i think worth
-
-    /3 months of discord nitro/,
-    /free steam give nitro/,
-    /nitro steam for free/,
-    /\.ru\//,
-    /free nudes/,
-    /\.ru\.com\//,
-  ];
-  const links = ["http://", "https://"];
-
-  if (
-    TOKENS.some((token) => token.test(message.cleanContent)) &&
-    links.some((v) => message.cleanContent.includes(v))
-  ) {
-    spammer = message.member.user.username;
-
-    if (!message.member.bannable)
-      message.channel.send(
-        "Spam detected, but I don't have enough permissions to ban this member!"
-      );
-    else
-      message.member.ban()
-        ? message.channel.send(`${spammer} got banned succesfully for spamming!`)
-        : message.send("Something went wrong trying to ban the spammer!");
-    message.delete()
-      ? console.log("deleted spam message")
-      : console.log("cannot delete the spam message!");
-  }
 });
 client.on("error", async (error) => {
   console.log("❌ | An error has ocurred", error);
