@@ -13,7 +13,7 @@
     "opusscript": "^0.0.8",
     "quick.db": "^9.0.8",
     "sodium": "^3.0.2",
-    "utf-8-validate": "^5.0.10",
+    "utf-8-validate": "^6.0.2",
     "ytdl-core": "^4.11.2"
   }
 }
