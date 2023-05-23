@@ -10,7 +10,7 @@
     "fs": "^0.0.1-security",
     "isomorphic-unfetch": "^4.0.2",
     "ohmyfetch": "^0.4.21",
-    "opusscript": "^0.0.8",
+    "opusscript": "^0.1.0",
     "quick.db": "^9.1.6",
     "sodium": "^3.0.2",
     "utf-8-validate": "^6.0.3",
