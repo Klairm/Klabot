@@ -11,7 +11,7 @@
     "isomorphic-unfetch": "^4.0.2",
     "ohmyfetch": "^0.4.21",
     "opusscript": "^0.1.0",
-    "quick.db": "^9.1.6",
+    "quick.db": "^9.1.7",
     "sodium": "^3.0.2",
     "utf-8-validate": "^6.0.3",
     "ytdl-core": "^4.11.5"
