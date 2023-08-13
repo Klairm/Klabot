@@ -239,21 +239,14 @@ client.on("interactionCreate", async (interaction) => {
     });
   }
 });
-/*client.on("messageCreate", async (message) => {
-  if (message.guild.id === "666042655259754497" && message.content == "que")
+client.on("messageCreate", async (message) => {
+  if (message.content == "que")
     message.channel.send(
       "https://cdn.discordapp.com/attachments/664187293451419678/1034078773928267876/image0.jpg"
     );
-});*/
-
-client.on("messageCreate", async (message) => {
-   if (message.author.id != "386937601761869825") return;
-        if(message.channel.isDMBased()) {
-        	client.users.fetch("340183665659346945").then(DM => DM.send(message.content));
-		//client.channels.fetch('666042655259754503').then(channel => channel.send(message.content))
-        }
-
 });
+
+
 
 client.on("error", async (error) => {
   console.log("❌ | An error has ocurred", error);
