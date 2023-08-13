@@ -14,7 +14,7 @@ module.exports = {
 		let volume = interaction.options.getInteger('integer');
 		if (!volume || volume > 200 || volume < 0)
 			return interaction.reply({ embeds:[{ title:'❌ | Please set a valid number between 0 and 200', ephemeral: true }]});
-		if (!interaction.client.player.getQueue(interaction.guild.id).setVolume(volume)) {
+		if (!interaction.client.player.nodes.get(interaction.guild).node.setVolume(volume)) {
 			return interaction.reply({ embeds: [{title:'❌ | Something went wrong trying to set the volume', ephemeral: true }]});
 		} else {
 			return interaction.reply({embeds:[{title:`✅  | Volume set to ${volume}.`}]});

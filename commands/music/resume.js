@@ -1,19 +1,28 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
-	data: new SlashCommandBuilder().setName('resume').setDescription('Resumes the current track.'),
-	async execute(interaction) {
-		if (!interaction.member.voice.channel) return interaction.reply({ content: '❌ | You are  not in a voice channel!', ephemeral: true });
-		if (interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel?.id )
-		return interaction.reply({embeds: [{title:"❌ | You are not in my voice channel!"}]});
+  data: new SlashCommandBuilder().setName("resume").setDescription("Resumes the current track."),
+  async execute(interaction) {
+    if (!interaction.member.voice.channel)
+      return interaction.reply({
+        content: "❌ | You are  not in a voice channel!",
+        ephemeral: true,
+      });
 
-		if (!interaction.client.player.getQueue(interaction.guild.id)) {
-			console.log(interaction.client.player.getQueue(interaction.guild.id));
-			return interaction.reply({embeds: [{title:"❌ | I'm not playing anything."}]});
-		}
-		
-		await interaction.client.player.getQueue(interaction.guild.id).setPaused(false)
-		return interaction.reply({embeds:[{title:'✅ | Track resumed!'}]});
-		
-	},
+	  interaction.client.player.nodes.get(interaction.guild).node.setBitrate(320)
+    if (interaction.member.voice.channel.id !== interaction.guild.members.me.voice.channel?.id)
+      return interaction.reply({ embeds: [{ title: "❌ | You are not in my voice channel!" }] });
+
+    if (interaction.client.player.nodes.get(interaction.guild).node.setPaused(false)) {
+      return interaction.reply({
+        embeds: [{ title: "✅ |  Track resumed!" }],
+        ephemeral: true,
+      });
+    } else {
+      return interaction.reply({
+        embeds: [{ title: "❌ | Something went wrong trying to resume the track!" }],
+        ephemeral: true,
+      });
+    }
+  },
 };
