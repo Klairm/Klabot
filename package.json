@@ -4,7 +4,7 @@
     "@discordjs/opus": "^0.9.0",
     "@discordjs/rest": "^2.0.0",
     "@discordjs/voice": "^0.16.0",
-    "better-sqlite3": "^8.5.0",
+    "better-sqlite3": "^8.5.1",
     "discord-api-types": "^0.37.52",
     "discord-player": "^6.6.2",
     "discord.js": "^14.12.1",
