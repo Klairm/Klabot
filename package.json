@@ -7,7 +7,7 @@
     "better-sqlite3": "^8.5.0",
     "discord-api-types": "^0.37.52",
     "discord-player": "^6.6.2",
-    "discord.js": "^14.12.1",
+    "discord.js": "^14.13.0",
     "fs": "^0.0.1-security",
     "isomorphic-unfetch": "^4.0.2",
     "ohmyfetch": "^0.4.21",
