@@ -205,9 +205,16 @@ client.on("interactionCreate", async (interaction) => {
 });
 client.on("messageCreate", async (message) => {
   if (message.guild.id === "666042655259754497" && message.content == "que") message.channel.send("https://cdn.discordapp.com/attachments/664187293451419678/1034078773928267876/image0.jpg");
-  
+
+client.on("messageCreate", (sexoooo)=> {
+      if (sexoooo.guild.id === "666042655259754497" && sexoooo.content == "sexo?") {
+        sexoooo.channel.send("https://cdn.discordapp.com/attachments/666042655259754503/1201647427871068231/sexooooo_sexoooooo.mp4?ex=65ca9460&is=65b81f60&hm=1c3df1e0f3ebe1394e02ceff8bab26ee784e5ab31f2c893940ceabcc25c3f852&");
+        } else {
+        };
+});
+
   // https://github.com/makigas/makibot/blob/trunk/src/hooks/csgo.ts thx danirod
-  
+
   const TOKENS = [
     // Different variations of steamcommunity.
     /steamcommmunlity\.com/,
