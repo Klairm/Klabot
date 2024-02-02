@@ -79,7 +79,7 @@ client.player.events.on("audioTracksAdd", (queue, playlist) => {
 });
 
 client.player.events.on("audioTrackAdd", (queue, song) => {
- 
+
   queue.metadata.channel.send({
     embeds: [
       {
@@ -156,7 +156,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
       reaction.message.guild.channels
 		  .fetch(await db.get(`${reaction.message.guild.id}.favmessage`)).then(ch => ch.send({embeds:[favMessage]}));
 
-      
+
 
   }
 });
@@ -176,7 +176,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
 
 
 
-  
+
 
   // Finally we check if the channel that the new user entered in is the door channel, playing the bell sound.
 
@@ -244,6 +244,9 @@ client.on("messageCreate", async (message) => {
     message.channel.send(
       "https://cdn.discordapp.com/attachments/664187293451419678/1034078773928267876/image0.jpg"
     );
+  if (message.content == "sexo?")
+    message.channel.send(
+      "https://cdn.discordapp.com/attachments/666042655259754503/1201647427871068231/sexooooo_sexoooooo.mp4?ex=65ca9460&is=65b81f60&hm=1c3df1e0f3ebe1394e02ceff8bab26ee784e5ab31f2c893940ceabcc25c3f852&");
 });
 
 
