@@ -50,7 +50,7 @@ const musicRow = new ActionRowBuilder().addComponents(
   new ButtonBuilder().setEmoji("⏭").setStyle(ButtonStyle.Primary).setCustomId("skip")
 );
 
-client.player = new Player(client);
+client.player = new Player(client,{skipFFmpeg: false              });
 
  client.player.extractors.loadDefault();
 
