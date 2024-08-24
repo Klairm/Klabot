@@ -74,7 +74,7 @@ You can reproduce music and YouTube videos with the player commands like: `/play
 
 ## TODO:
 
-- Move from quickDB to MongoDB
+- Move from quickDB to SQLite or PostgresSQL
 - Handle all events in individual files
 
  <p align=center>
