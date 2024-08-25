@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@discord-player/extractor": "^4.4.7",
+    
     "@discordjs/opus": "^0.9.0",
     "@discordjs/rest": "^2.3.0",
     "@discordjs/voice": "^0.16.0",
@@ -8,6 +8,7 @@
     "better-sqlite3": "^8.5.0",
     "discord-api-types": "^0.37.52",
     "discord-player": "^6.6.2",
+    "discord-player-youtubei": "^1.2.6",
     "discord.js": "^14.15.3",
     "fs": "^0.0.1-security",
     "isomorphic-unfetch": "^4.0.2",
